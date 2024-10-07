@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.ossdanoroc.bookstoreapp.model.Book;
 import com.ossdanoroc.bookstoreapp.repository.IBookRepository;
@@ -13,7 +15,7 @@ import com.ossdanoroc.bookstoreapp.service.IBookService;
 
 @Service
 public class BookServiceImpl implements IBookService {
-	
+
 	@Autowired
 	private IBookRepository repo;
 
@@ -24,12 +26,14 @@ public class BookServiceImpl implements IBookService {
 	}
 
 	@Override
-	public Book update(Book book) {
+	public Book update(Book book, String _id) {
 		// TODO Auto-generated method stub
 		// --- use this code if the code before does not work
-//		Book bookById = repo.findById(book.getBookId()).get();
-//		bookById.setBookTitle("some new Title");
-		return repo.save(book);
+		ObjectId oId = new ObjectId(_id);
+		Book bookUpdated = repo.findById(oId).orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found for the id::" + oId));
+		bookUpdated.setBookTitle(book.getBookTitle());
+		return repo.save(bookUpdated);
 	}
 
 	@Override

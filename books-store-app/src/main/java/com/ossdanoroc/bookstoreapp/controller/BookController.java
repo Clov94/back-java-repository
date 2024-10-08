@@ -23,7 +23,7 @@ import com.ossdanoroc.bookstoreapp.service.IBookService;
 
 
 
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("v1/api/books/")
 public class BookController {
